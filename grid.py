@@ -254,13 +254,15 @@ def plot_grid(data, X=None, Y=None,
 							'color_gradient', 'shading', 'smoothed',
 							'colorbar', 'cax', 'cax_size', 'cax_padding',
 							'cax_shrink', 'cbar_length', 'cbar_aspect',
-							'cbar_location', 'cbar_spacing',
-							'cbar_ticks', 'cbar_label_format', 'cbar_title',
-							'cbar_extend', 'cbar_lines', 'cbar_range', 'contour_lines',
-							'contour_color', 'contour_width', 'contour_style',
-							'contour_labels', 'alpha', 'style_sheet', 'border_width',
-							'skip_frame', 'fig_filespec', 'figsize', 'dpi',
-							'ax', 'kwargs']}
+							'cbar_location', 'cbar_spacing', 'cbar_ticks',
+							'cbar_label_format', 'cbar_label_fontsize',
+							'cbar_title', 'cbar_title_fontsize',
+							'cbar_extend', 'cbar_lines', 'cbar_range',
+							'contour_lines', 'contour_color', 'contour_width',
+							'contour_style', 'contour_labels',
+							'contour_label_fontsize', 'alpha', 'style_sheet',
+							'border_width', 'skip_frame', 'fig_filespec',
+							'figsize', 'dpi', 'ax', 'kwargs']}
 
 	from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 	from matplotlib.colors import BoundaryNorm
