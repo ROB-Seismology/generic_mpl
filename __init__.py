@@ -24,9 +24,37 @@ else:
 
 ## Import submodules
 
-## plot_generic
+## common (no internal dependencies)
 if not reloading:
-  from . import plot_generic
+	from . import common
 else:
-  reload(plot_generic)
-from .plot_generic import *
+	reload(common)
+from .common import *
+
+## frame (no internal dependencies)
+if not reloading:
+	from . import frame
+else:
+	reload(frame)
+from .frame import *
+
+## xy (depends on common, frame)
+if not reloading:
+	from . import xy
+else:
+	reload(xy)
+from .xy import *
+
+## histogram (depends on common, frame)
+if not reloading:
+	from . import histogram
+else:
+	reload(histogram)
+from .histogram import *
+
+## grid (depends on common, frame)
+if not reloading:
+	from . import grid
+else:
+	reload(grid)
+from .grid import *
