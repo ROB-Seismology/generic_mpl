@@ -38,6 +38,13 @@ else:
 	reload(frame)
 from .frame import *
 
+## multi (no internal dependencies)
+if not reloading:
+	from . import multi
+else:
+	reload(multi)
+from .multi import *
+
 ## xy (depends on common, frame)
 if not reloading:
 	from . import xy
