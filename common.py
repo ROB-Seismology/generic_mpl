@@ -12,6 +12,7 @@ except:
 	basestring = str
 
 
+import matplotlib
 import pylab
 
 
@@ -73,10 +74,12 @@ common_doc = """
 """
 
 
-def show_or_save_plot(ax, fig_filespec=None, dpi=300, border_width=0.2):
+def show_or_save_plot(ax_or_fig, fig_filespec=None, dpi=300, border_width=0.2):
 	"""
 	Show plot on screen or save it to a file
 
+	:param ax_or_fig:
+		matplotlib Axes or Figure instance
 	:param fig_filespec:
 		str, full path to output file
 		If None, will plot on screen
@@ -92,13 +95,16 @@ def show_or_save_plot(ax, fig_filespec=None, dpi=300, border_width=0.2):
 		(default: 0.2)
 
 	:return:
-		matplotlib Axes instance if :param:`fig_filespec` is either None
-		or 'wait', else None
+		matplotlib Axes or Figure instance if :param:`fig_filespec` is
+		either None or 'wait', else None
 	"""
-	fig = ax.get_figure()
+	if isinstance(ax_or_fig, matplotlib.figure.Figure):
+		fig = ax_or_fig
+	else:
+		fig = ax_or_fig.get_figure()
 
 	if fig_filespec == "wait":
-		return ax
+		return ax_or_fig
 	elif fig_filespec:
 		kwargs = {}
 		if border_width is not None:
@@ -109,4 +115,4 @@ def show_or_save_plot(ax, fig_filespec=None, dpi=300, border_width=0.2):
 		## Note, using fig.show(), the plot disappears immediately!
 		#fig.show()
 		pylab.show()
-		return ax
+		return ax_or_fig
