@@ -143,8 +143,12 @@ ax_frame_doc = """
 		(default: '')
 	:param xtick_side:
 		str, on which side of the plot X ticks should be drawn:
-		'bottom', 'top' or 'both'
+		'bottom', 'top', 'both' or 'none'
 		(default: '')
+	:param xlabel_side:
+		str, on which side of the plot X tick labels should be drawn:
+		'bottom', 'top', 'both' or 'none'
+		(default: '', will take same value as :param:`xtick_side`)
 	:param yticks:
 		list or array, Y axis tick positions
 		Note that, if Y values of :param:`datasets` are datetimes,
@@ -164,8 +168,12 @@ ax_frame_doc = """
 		(default: '')
 	:param ytick_side:
 		str, on which side of the plot Y ticks should be drawn:
-		'left', 'right' or 'both'
+		'left', 'right', 'both' or 'none'
 		(default: '')
+	:param ylabel_side:
+		str, on which side of the plot Y tick labels should be drawn:
+		'left', 'right', 'both' or 'none'
+		(default: '', will take same value as :param:`ytick_side`)
 	:param tick_label_fontsize:
 		int or str, font size to use for axis tick labels
 		(default: 'medium')
@@ -208,69 +216,14 @@ ax_frame_doc = """
 """
 
 
-common_doc = """
-
-	:param legend_location:
-		int or str, location of legend (matplotlib location code):
-			"best" 	0
-			"upper right" 	1
-			"upper left" 	2
-			"lower left" 	3
-			"lower right" 	4
-			"right" 		5
-			"center left" 	6
-			"center right" 	7
-			"lower center" 	8
-			"upper center" 	9
-			"center" 		10
-		(default: 0)
-	:param legend_fontsize:
-		int or str, font size to use for legend labels
-		If not specified, will use the value of :param:`tick_label_fontsize`
-		(default: 'medium')
-	:param style_sheet:
-		str, matplotlib style sheet to apply to plot
-		See matplotlib.style.available for availabel style sheets
-		(default: 'classic')
-	:param border_width:
-		float, width of border around plot frame in cm
-		If None, white space will not be removed
-		(default: 0.2)
-	:param skip_frame:
-		bool, whether or not to skip plotting the axes frame
-		(default: False)
-	:param fig_filespec:
-		str, full path to output file
-		If None, will plot on screen
-		If 'wait', plotting is deferred
-		(default: None)
-	:param figsize:
-		(width, height) tuple of floats, plot size in inches,
-		only applies if :param:`ax` is None
-		(default: None)
-	:param dpi:
-		int, resolution of plot,
-		only applies if :param:`fig_filespec` is set to output file
-		(default: 300)
-	:param ax:
-		matplotlib Axes instance, in which plot will be drawn
-		If specified, :param:`fig_filespec` will be overridden with 'wait'
-		(default: None, will generate new Axes instance)
-
-	:return:
-		matplotlib Axes instance if :param:`fig_filespec` is either None
-		or 'wait', else None
-"""
-
-
 def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 				xscaling='lin', yscaling='lin',
 				xmin=None, xmax=None, ymin=None, ymax=None,
 				xlabel='', ylabel='', ax_label_fontsize='large',
 				xticks=None, xticklabels=None, xtick_interval=None, xtick_rotation=0,
-				xtick_direction='', xtick_side='',
+				xtick_direction='', xtick_side='', xlabel_side='',
 				yticks=None, yticklabels=None, ytick_interval=None, ytick_rotation=0,
-				ytick_direction='', ytick_side='',
+				ytick_direction='', ytick_side='', ylabel_side='',
 				tick_label_fontsize='medium', tick_params={},
 				title='', title_fontsize='large',
 				xgrid=0, ygrid=0, aspect_ratio=None,
@@ -291,15 +244,17 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 		None
 	"""
 	## Axis limits
-	_xmin, _xmax = ax.get_xlim()
-	xmin = _xmin if xmin is None else xmin
-	xmax = _xmax if xmax is None else xmax
-	ax.set_xlim(xmin, xmax)
+	if not None in (xmin, xmax):
+		_xmin, _xmax = ax.get_xlim()
+		xmin = _xmin if xmin is None else xmin
+		xmax = _xmax if xmax is None else xmax
+		ax.set_xlim(xmin, xmax)
 
-	_ymin, _ymax = ax.get_ylim()
-	ymin = _ymin if ymin is None else ymin
-	ymax = _ymax if ymax is None else ymax
-	ax.set_ylim(ymin, ymax)
+	if not None in (ymin, ymax):
+		_ymin, _ymax = ax.get_ylim()
+		ymin = _ymin if ymin is None else ymin
+		ymax = _ymax if ymax is None else ymax
+		ax.set_ylim(ymin, ymax)
 
 	## Axis scaling
 	if xscaling[0] == '-':
@@ -478,22 +433,58 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 		ax.tick_params(axis='x', direction=xtick_direction)
 
 	if xtick_side:
+		if not xlabel_side:
+			xlabel_side = xtick_side
 		side_kwargs = {}
 		if xtick_side in ('top', 'both'):
 			side_kwargs['top'] = True
 		if xtick_side in ('bottom', 'both'):
 			side_kwargs['bottom'] = True
+		if xtick_side == 'none':
+			side_kwargs['top'] = side_kwargs['bottom'] = False
+		ax.tick_params(axis='x', **side_kwargs)
+
+	if xlabel_side:
+		side_kwargs = {}
+		if xlabel_side == 'bottom':
+			side_kwargs['labeltop'] = False
+			side_kwargs['labelbottom'] = True
+		elif xlabel_side == 'top':
+			side_kwargs['labeltop'] = True
+			side_kwargs['labelbottom'] = False
+		elif xlabel_side == 'both':
+			side_kwargs['labeltop'] = side_kwargs['labelbottom'] = True
+		elif xlabel_side == 'none':
+			side_kwargs['labeltop'] = side_kwargs['labelbottom'] = False
 		ax.tick_params(axis='x', **side_kwargs)
 
 	if ytick_direction:
 		ax.tick_params(axis='y', direction=ytick_direction)
 
 	if ytick_side:
+		if not ylabel_side:
+			ylabel_side = ytick_side
 		side_kwargs = {}
 		if ytick_side in ('left', 'both'):
 			side_kwargs['left'] = True
 		if ytick_side in ('right', 'both'):
 			side_kwargs['right'] = True
+		if ytick_side == 'none':
+			side_kwargs['left'] = side_kwargs['right'] = False
+		ax.tick_params(axis='y', **side_kwargs)
+
+	if ylabel_side:
+		side_kwargs = {}
+		if ylabel_side == 'left':
+			side_kwargs['labelleft'] = True
+			side_kwargs['labelright'] = False
+		elif ylabel_side == 'right':
+			side_kwargs['labelleft'] = False
+			side_kwargs['labelright'] = True
+		elif ylabel_side == 'both':
+			side_kwargs['labelleft'] = side_kwargs['labelright'] = True
+		elif ylabel_side == 'none':
+			side_kwargs['labelleft'] = side_kwargs['labelright'] = False
 		ax.tick_params(axis='y', **side_kwargs)
 
 	## Grid
