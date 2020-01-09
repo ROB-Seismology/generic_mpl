@@ -117,7 +117,7 @@ ax_frame_doc = """
 		Note that, if X values of :param:`datasets` are datetimes,
 		these should be datetimes also
 		(default: None, let matplotlib decide)
-	:param xticklabels:
+	:param xtick_labels:
 		X axis tick labels, either:
 		- None (= automatic labels)
 		- list of labels corresponding to :param:`xticks`
@@ -154,9 +154,9 @@ ax_frame_doc = """
 		Note that, if Y values of :param:`datasets` are datetimes,
 		these should be datetimes also
 		(default: None, let matplotlib decide)
-	:param yticklabels:
+	:param ytick_labels:
 		Y axis tick labels
-		See :param:`xticklabels` for options
+		See :param:`xtick_labels` for options
 	:param ytick_interval:
 		Y axis tick interval specification
 		see :param:`xtick_interval` for options
@@ -220,9 +220,9 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 				xscaling='lin', yscaling='lin',
 				xmin=None, xmax=None, ymin=None, ymax=None,
 				xlabel='', ylabel='', ax_label_fontsize='large',
-				xticks=None, xticklabels=None, xtick_interval=None, xtick_rotation=0,
+				xticks=None, xtick_labels=None, xtick_interval=None, xtick_rotation=0,
 				xtick_direction='', xtick_side='', xlabel_side='',
-				yticks=None, yticklabels=None, ytick_interval=None, ytick_rotation=0,
+				yticks=None, ytick_labels=None, ytick_interval=None, ytick_rotation=0,
 				ytick_direction='', ytick_side='', ylabel_side='',
 				tick_label_fontsize='medium', tick_params={},
 				title='', title_fontsize='large',
@@ -318,7 +318,7 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 			major_loc = matplotlib.ticker.NullLocator()
 		ax.xaxis.set_major_locator(major_loc)
 		if isinstance(major_loc, mpl_dates.DateLocator):
-			if xticklabels is None:
+			if xtick_labels is None:
 				ax.xaxis.set_major_formatter(mpl_dates.AutoDateFormatter(locator=major_loc))
 
 		if isinstance(minor_tick_interval, matplotlib.ticker.Locator):
@@ -335,22 +335,22 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 		## Note: no formatter for minor ticks, as we don't print them
 
 	## X ticklabels
-	if xscaling[:3] == 'log' and xticklabels is None:
+	if xscaling[:3] == 'log' and xtick_labels is None:
 		## Do not use log notation for small exponents
 		if xmin > 1E-4 and xmax < 1E+4:
-			xticklabels = matplotlib.ticker.FormatStrFormatter('%g')
-	if isinstance(xticklabels, matplotlib.ticker.Formatter):
-		ax.xaxis.set_major_formatter(xticklabels)
-	elif isinstance(xticklabels, basestring):
-		if xticklabels == '':
+			xtick_labels = matplotlib.ticker.FormatStrFormatter('%g')
+	if isinstance(xtick_labels, matplotlib.ticker.Formatter):
+		ax.xaxis.set_major_formatter(xtick_labels)
+	elif isinstance(xtick_labels, basestring):
+		if xtick_labels == '':
 			major_formatter = matplotlib.ticker.NullFormatter()
 		elif x_is_date:
-			major_formatter = mpl_dates.DateFormatter(xticklabels)
+			major_formatter = mpl_dates.DateFormatter(xtick_labels)
 		else:
-			major_formatter = matplotlib.ticker.FormatStrFormatter(xticklabels)
+			major_formatter = matplotlib.ticker.FormatStrFormatter(xtick_labels)
 		ax.xaxis.set_major_formatter(major_formatter)
-	elif xticklabels is not None:
-		ax.set_xticklabels(xticklabels)
+	elif xtick_labels is not None:
+		ax.set_xtick_labels(xtick_labels)
 
 	## Y ticks
 	if yticks is not None:
@@ -377,7 +377,7 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 			major_loc = matplotlib.ticker.NullLocator()
 		ax.yaxis.set_major_locator(major_loc)
 		if isinstance(major_loc, mpl_dates.DateLocator):
-			if yticklabels is None:
+			if ytick_labels is None:
 				ax.yaxis.set_major_formatter(mpl_dates.AutoDateFormatter(locator=major_loc))
 
 		if isinstance(minor_tick_interval, matplotlib.ticker.Locator):
@@ -394,34 +394,34 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 		## Note: no formatter for minor ticks, as we don't print them
 
 	## Y tick labels
-	if yscaling[:3] == 'log' and yticklabels is None:
+	if yscaling[:3] == 'log' and ytick_labels is None:
 		## Do not use log notation for small exponents
 		if ymin > 1E-4 and ymax < 1E+4:
-			yticklabels = matplotlib.ticker.FormatStrFormatter('%g')
-	if isinstance(yticklabels, matplotlib.ticker.Formatter):
-		ax.yaxis.set_major_formatter(yticklabels)
-	elif isinstance(yticklabels, basestring):
-		if yticklabels == '':
+			ytick_labels = matplotlib.ticker.FormatStrFormatter('%g')
+	if isinstance(ytick_labels, matplotlib.ticker.Formatter):
+		ax.yaxis.set_major_formatter(ytick_labels)
+	elif isinstance(ytick_labels, basestring):
+		if ytick_labels == '':
 			major_formatter = matplotlib.ticker.NullFormatter()
 		elif y_is_date:
-			major_formatter = mpl_dates.DateFormatter(yticklabels)
+			major_formatter = mpl_dates.DateFormatter(ytick_labels)
 		else:
-			major_formatter = matplotlib.ticker.FormatStrFormatter(yticklabels)
+			major_formatter = matplotlib.ticker.FormatStrFormatter(ytick_labels)
 		ax.yaxis.set_major_formatter(major_formatter)
-	elif yticklabels is not None:
-		ax.set_yticklabels(yticklabels)
+	elif ytick_labels is not None:
+		ax.set_ytick_labels(ytick_labels)
 
 	## Tick label size and rotation
-	for label in ax.get_xticklabels() + ax.get_yticklabels():
+	for label in ax.get_xtick_labels() + ax.get_ytick_labels():
 		label.set_size(tick_label_fontsize)
 
 	if xtick_rotation:
-		for label in ax.get_xticklabels():
+		for label in ax.get_xtick_labels():
 			label.set_horizontalalignment('right')
 			label.set_rotation(xtick_rotation)
 
 	if ytick_rotation:
-		for label in ax.get_yticklabels():
+		for label in ax.get_ytick_labels():
 			label.set_horizontalalignment('right')
 			label.set_rotation(ytick_rotation)
 
