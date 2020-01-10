@@ -31,10 +31,14 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 					sharex=None, share_xlabel=True,
 					sharey=None, share_ylabel=True,
 					xlabel=None, ylabel=None, ax_label_font='large',
+					col_titles=[], row_titles=[], col_row_title_font='large',
+					hide_axes=False,
 					title=None, title_font='x-large',
 					ax_size=None, dpi=None):
 	"""
 	Create multi-plot with plots organized in rows and columns
+
+	fig.axes[col + row*num_cols]
 
 
 	"""
@@ -65,12 +69,11 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 				#ax.annotate(label, xy=(0.1, 0.5), xycoords='axes fraction',
 				#			va='center', ha='center', zorder=10000)
 				if isinstance(label_font, (int, basestring)):
-					txt = AnchoredText(label, loc=label_loc,
-									prop={'fontsize': label_font})
+					txt_kwargs = dict(prop={'fontsize': label_font})
 				else:
-					txt = AnchoredText(label, loc=label_loc,
-									**label_font.to_kwargs())
-				txt.zorder = 10000
+					txt_kwargs = label_font.to_kwargs()
+				txt = AnchoredText(label, loc=label_loc, **txt_kwargs)
+				txt.set_zorder(10000)
 				ax.add_artist(txt)
 
 			## Ticks
@@ -99,6 +102,44 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 				if ytick_side == 'none':
 					side_kwargs['left'] = side_kwargs['right'] = False
 				ax.tick_params(axis='y', **side_kwargs)
+
+			## Column / row labels
+			if ax.is_first_row() and col < len(col_titles):
+				#ax.set_title(col_titles[col], fontsize=col_row_title_font)
+				if isinstance(col_row_title_font, (int, basestring)):
+					txt_kwargs = dict(prop={'fontsize': col_row_title_font})
+				else:
+					txt_kwargs = col_row_title_font.to_kwargs()
+				txt_kwargs.pop('rotation', None)
+				txt = AnchoredText(col_titles[col], loc=8, frameon=True,
+									bbox_to_anchor=(0.5, 1.),
+									bbox_transform=ax.transAxes, **txt_kwargs)
+				ax.add_artist(txt)
+			if ax.is_first_col() and row < len(row_titles):
+				#ax.yaxis.set_label_position('left')
+				#ax.yaxis.label.set_visible(True)
+				#ax.set_ylabel(row_titles[row], fontsize=col_row_title_font)
+				if isinstance(col_row_title_font, (int, basestring)):
+					txt_kwargs = dict(fontsize=col_row_title_font)
+				else:
+					txt_kwargs = col_row_title_font.to_kwargs()
+				txt_kwargs['rotation'] = 90
+				if not 'bbox' in txt_kwargs:
+					txt_kwargs['bbox'] = dict(boxstyle='square', fc='w')
+				txt_kwargs['va'] = 'center'
+				txt_kwargs['ha'] = 'right'
+				ax.annotate(row_titles[row], xy=(0., 0.5), xycoords='axes fraction',
+							xytext=(-10, 0), textcoords='offset points',
+							**txt_kwargs)
+				"""
+				txt_kwargs.pop('rotation', None)
+				txt = AnchoredText(row_titles[row], loc=8,
+									bbox_to_anchor=(0., 0.5),
+									bbox_transform=ax.transAxes, **txt_kwargs)
+				tf = ax.transData + matplotlib.transforms.Affine2D().rotate_deg(90)
+				txt.set_transform(tf)
+				ax.add_artist(txt)
+				"""
 
 			## Hide tick labels and axis labels
 			if sharex:
@@ -178,6 +219,9 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 				ymax = _ymax if ymax is None else ymax
 				ax.set_ylim(ymin, ymax)
 
+			if hide_axes:
+				ax.set_axis_off()
+
 	## sharex / sharey
 	## Use same range for X/Y axis
 	if sharex in ('all', True):
@@ -222,7 +266,7 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 	else:
 		ax.xaxis.set_label_position('bottom')
 
-	elif ylabel_side == 'right':
+	if ylabel_side == 'right':
 		ax.yaxis.set_label_position('right')
 	else:
 		ax.yaxis.set_label_position('left')
