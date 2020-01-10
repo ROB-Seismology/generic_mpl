@@ -412,18 +412,14 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 		ax.set_ytick_labels(ytick_labels)
 
 	## Tick label size and rotation
-	for label in ax.get_xtick_labels() + ax.get_ytick_labels():
-		label.set_size(tick_label_fontsize)
+	pylab.setp(ax.get_xticklabels(), fontsize=tick_label_fontsize)
+	pylab.setp(ax.get_yticklabels(), fontsize=tick_label_fontsize)
 
 	if xtick_rotation:
-		for label in ax.get_xtick_labels():
-			label.set_horizontalalignment('right')
-			label.set_rotation(xtick_rotation)
+		pylab.setp(ax.get_xticklabels(), ha='right', rotation=xtick_rotation)
 
 	if ytick_rotation:
-		for label in ax.get_ytick_labels():
-			label.set_horizontalalignment('right')
-			label.set_rotation(ytick_rotation)
+		pylab.setp(ax.get_yticklabels(), ha='right', rotation=ytick_rotation)
 
 	## Tick aspect
 	if tick_params:
