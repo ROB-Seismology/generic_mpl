@@ -36,10 +36,29 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 					title=None, title_font='x-large',
 					ax_size=None, dpi=None):
 	"""
-	Create multi-plot with plots organized in rows and columns
+	Create multi-plot or panel plot with plots organized in rows and columns
 
 	fig.axes[col + row*num_cols]
 
+	:param num_rows:
+		int, number of rows
+	:param num_cols:
+		int, number of columns
+	:param wspace:
+		float, fraction of figure width to use for space between columns
+		(default: None)
+	:param hspace:
+		float, fraction of figure height to use for space between rows
+		(default: None)
+	:param width_ratios:
+		list of floats, relative width ratios of different columns
+		(default: None)
+	:param height_ratios:
+		list of floats, relative height ratios of different rows
+		(default: None)
+	:param labels:
+		list of strings, panel labels
+		(default: [])
 
 	"""
 	# TODO: figsize or ax_size, aspect_ratio
@@ -57,7 +76,8 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 
 	for row in range(num_rows):
 		for col in range(num_cols):
-			# TODO: add sharex/sharey argument??
+			## Note: in newer version of matplotlib, it is possible to add
+			## sharex/sharey arguments here. However, we do it manually below
 			ax = fig.add_subplot(gs[row, col])
 
 			if labels:
@@ -66,8 +86,6 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 					label = labels[i]
 				except IndexError:
 					label = ''
-				#ax.annotate(label, xy=(0.1, 0.5), xycoords='axes fraction',
-				#			va='center', ha='center', zorder=10000)
 				if isinstance(label_font, (int, basestring)):
 					txt_kwargs = dict(prop={'fontsize': label_font})
 				else:
@@ -116,9 +134,6 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 									bbox_transform=ax.transAxes, **txt_kwargs)
 				ax.add_artist(txt)
 			if ax.is_first_col() and row < len(row_titles):
-				#ax.yaxis.set_label_position('left')
-				#ax.yaxis.label.set_visible(True)
-				#ax.set_ylabel(row_titles[row], fontsize=col_row_title_font)
 				if isinstance(col_row_title_font, (int, basestring)):
 					txt_kwargs = dict(fontsize=col_row_title_font)
 				else:
@@ -132,6 +147,7 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 							xytext=(-10, 0), textcoords='offset points',
 							**txt_kwargs)
 				"""
+				## Note: AnchoredText does not support rotation
 				txt_kwargs.pop('rotation', None)
 				txt = AnchoredText(row_titles[row], loc=8,
 									bbox_to_anchor=(0., 0.5),
@@ -207,13 +223,13 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 						ax.yaxis.label.set_visible(True)
 
 			## Axis limits
-			if not None in (xmin, xmax):
+			if not (xmin is None and xmax is None):
 				_xmin, _xmax = ax.get_xlim()
 				xmin = _xmin if xmin is None else xmin
 				xmax = _xmax if xmax is None else xmax
 				ax.set_xlim(xmin, xmax)
 
-			if not None in (ymin, ymax):
+			if not (ymin is None and ymax is None):
 				_ymin, _ymax = ax.get_ylim()
 				ymin = _ymin if ymin is None else ymin
 				ymax = _ymax if ymax is None else ymax
