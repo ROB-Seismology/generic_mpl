@@ -244,13 +244,13 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 		None
 	"""
 	## Axis limits
-	if not None in (xmin, xmax):
+	if not (xmin is None and xmax is None):
 		_xmin, _xmax = ax.get_xlim()
 		xmin = _xmin if xmin is None else xmin
 		xmax = _xmax if xmax is None else xmax
 		ax.set_xlim(xmin, xmax)
 
-	if not None in (ymin, ymax):
+	if not (ymin is None and ymax is None):
 		_ymin, _ymax = ax.get_ylim()
 		ymin = _ymin if ymin is None else ymin
 		ymax = _ymax if ymax is None else ymax
