@@ -24,7 +24,7 @@ __all__ = ['create_multi_plot']
 
 def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 					width_ratios=None, height_ratios=None,
-					labels=[], label_font='large', label_loc='upper right',
+					labels=[], label_font='large', label_location='upper right',
 					xmin=None, xmax=None, ymin=None, ymax=None,
 					xtick_direction='', xtick_side='', xlabel_side='',
 					ytick_direction='', ytick_side='', ylabel_side='',
@@ -36,9 +36,7 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 					title=None, title_font='x-large',
 					ax_size=None, dpi=None):
 	"""
-	Create multi-plot or panel plot with plots organized in rows and columns
-
-	fig.axes[col + row*num_cols]
+	Create multi-plot with panels organized in rows and columns
 
 	:param num_rows:
 		int, number of rows
@@ -59,10 +57,113 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 	:param labels:
 		list of strings, panel labels
 		(default: [])
+	:param label_font:
+		int, str or instance of :class:`TextStyle`
+		size (in points or relative size as string) or style of
+		panel label font
+		(default: 'large')
+	:param label_location:
+		int or str, location code or string for panel labels
+		(default: 'upper right')
+	:param xmin:
+		float, start value for X axis
+		(default: None, let matplotlib decide)
+	:param xmax:
+		float, end value for X axis
+		(default: None, let matplotlib decide)
+	:param ymin:
+		float, start value for Y axis
+		(default: None, let matplotlib decide)
+	:param ymax:
+		float, end value for Y axis
+		(default: None, let matplotlib decide)
+	:param xtick_direction:
+		str, X axis tick direction: 'in', 'out' or 'both'
+		(default: '')
+	:param xtick_side:
+		str, on which side of the plot X ticks should be drawn:
+		'bottom', 'top', 'both' or 'none'
+		(default: '')
+	:param xlabel_side:
+		str, on which side of the plot X tick labels should be drawn:
+		'bottom', 'top', 'both' or 'none'
+		(default: '')
+	:param ytick_direction:
+		str, Y axis tick direction: 'in', 'out' or 'both'
+		(default: '')
+	:param ytick_side:
+		str, on which side of the plot Y ticks should be drawn:
+		'left', 'right', 'both' or 'none'
+		(default: '')
+	:param ylabel_side:
+		str, on which side of the plot Y tick labels should be drawn:
+		'left', 'right', 'both' or 'none'
+		(default: '')
+	:param sharex:
+		str, indicating whether or not panels have the same X axis
+		(will set same range and hide tick labels where possible):
+		should be one of 'row', 'col', 'all' (= True)
+		(default: None)
+	:param share_xlabel:
+		bool, whether or not panels share their X axis label
+		(will hide X axis labels where possible)
+		(default: True)
+	:param sharey:
+	:param share_ylabel:
+		cf. :param:`sharex` and :param:`share_xlabel`, but for Y axis
+	:param xlabel:
+		str, overall X axis label
+		(default: None)
+	:param ylabel:
+		str, overall Y axis label:
+		(default: None)
+	:param ax_label_font:
+		int, str or instance of :class:`TextStyle`
+		size (in points or relative size as string) or style of
+		axis label font
+		(default: 'large')
+	:param col_titles:
+		list of strings, column titles
+		(default: [])
+	:param row_titles:
+		list of strings, row titles
+		(default: [])
+	:param col_row_title_font:
+		int, str or instance of :class:`TextStyle`
+		size (in points or relative size as string) or style of
+		column and row titles
+		(default: 'large')
+	:param hide_axes:
+		bool, whether or not to hide plot axes in all panels
+		(default: False)
+	:param title:
+		str, overall plot title
+		(default: None)
+	:param title_font:
+		int, str or instance of :class:`TextStyle`
+		size (in points or relative size as string) or style of
+		plot title
+		(default: 'x-large')
+	:param ax_size:
+		(width, height) tuple of floats, dimension of individual panels
+		Overall figure size will be set based on this value and number
+		of rows and columns
+		(default: None)
+	:param dpi:
+		int, image resolution
+		(default: None)
 
+	:return:
+		instance of :class:`matplotlib.Figure`
+		An individual panel in a particular row and column can be accessed
+		using fig.axes[col + row*num_cols]
+		Note that figure contains one additional hidden axes holding
+		overall X and Y labels
 	"""
+	## Note: Not possible to add style_sheet argument, as it will be overridden
+	## for each individual panel
+
 	# TODO: figsize or ax_size, aspect_ratio
-	# TODO: style_sheet
 	#fig = pylab.figure(constrained_layout=True)
 	if ax_size:
 		w, h = ax_size
@@ -90,9 +191,10 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 					txt_kwargs = dict(prop={'fontsize': label_font})
 				else:
 					txt_kwargs = label_font.to_kwargs()
-				txt = AnchoredText(label, loc=label_loc, **txt_kwargs)
-				txt.set_zorder(10000)
-				ax.add_artist(txt)
+				if label:
+					txt = AnchoredText(label, loc=label_location, **txt_kwargs)
+					txt.set_zorder(10000)
+					ax.add_artist(txt)
 
 			## Ticks
 			if xtick_direction:
