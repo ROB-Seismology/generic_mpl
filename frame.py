@@ -350,7 +350,7 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 			major_formatter = matplotlib.ticker.FormatStrFormatter(xtick_labels)
 		ax.xaxis.set_major_formatter(major_formatter)
 	elif xtick_labels is not None:
-		ax.set_xtick_labels(xtick_labels)
+		ax.set_xticklabels(xtick_labels)
 
 	## Y ticks
 	if yticks is not None:
@@ -409,7 +409,7 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 			major_formatter = matplotlib.ticker.FormatStrFormatter(ytick_labels)
 		ax.yaxis.set_major_formatter(major_formatter)
 	elif ytick_labels is not None:
-		ax.set_ytick_labels(ytick_labels)
+		ax.set_yticklabels(ytick_labels)
 
 	## Tick label size and rotation
 	pylab.setp(ax.get_xticklabels(), fontsize=tick_label_fontsize)
