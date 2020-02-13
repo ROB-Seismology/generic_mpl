@@ -70,14 +70,23 @@ def plot_xy(datasets,
 		(default: [], will not draw markers)
 	:param marker_sizes:
 		list of marker sizes to cycle over for each dataset
+		May also be a list of arrays with variable sizes for each point
+		in dataset if linestyle for this dataset is empty or linewidth
+		is zero
 		(default: [6])
 	:param marker_intervals:
 		(default: [], will draw marker for each datapoint)
 	:param marker_edge_colors:
 		list of marker line colors to cycle over for each dataset
+		May also be a list of color lists with variable colors for each
+		point in dataset if linestyle for this dataset is empty or
+		linewidth is zero
 		(default: ['k'])
 	:param marker_fill_colors:
 		list of marker fill colors to cycle over for each dataset
+		May also be a list of color lists with variable colors for each
+		point in dataset if linestyle for this dataset is empty or
+		linewidth is zero
 		(default: [], will use colors defined in :param:`colors`)
 	:param marker_edge_widths:
 		list of marker line widths to cycle over for each dataset
@@ -114,13 +123,13 @@ def plot_xy(datasets,
 		colors = colors(np.linspace(0, 1, len(datasets)))
 	if not fill_colors:
 		fill_colors = [None]
-	if not linewidths:
+	if linewidths is None or linewidths == []:
 		linewidths = [1]
 	if not linestyles:
 		linestyles = ['-']
 	if not markers:
 		markers = ['']
-	if not marker_sizes:
+	if marker_sizes is None or marker_sizes == []:
 		marker_sizes = [6]
 	if not marker_intervals:
 		marker_intervals = [None]
@@ -191,11 +200,18 @@ def plot_xy(datasets,
 				mfc=marker_fill_color, mew=marker_edge_width, markevery=marker_interval,
 				label='_nolegend_')
 		else:
-			ax.plot(x, y, marker, color=color, ls=linestyle, lw=linewidth,
-				ms=marker_size, mec=marker_edge_color, mfc=marker_fill_color,
-				mew=marker_edge_width, markevery=marker_interval, label=label)
-			#ax.scatter(x, y, s=symbol_size, edgecolors=edge_color, label=label,
-			#	marker=symbol, facecolors=fill_color, linewidth=edge_width)
+			#if not (np.isscalar(marker_size) and np.isscalar(marker_edge_color)
+			#		and np.isscalar(marker_fill_color)):
+			if linestyle in ('', 'none', 'None') or linewidth == 0:
+				## No line, marker sizes and/or colors may be different
+				ax.scatter(x, y, s=np.power(marker_size, 2), edgecolors=marker_edge_color,
+					marker=marker, facecolors=marker_fill_color, linewidth=marker_edge_width,
+					label=label)
+			else:
+				## Markers are associated with lines and should have same size/color
+				ax.plot(x, y, marker, color=color, ls=linestyle, lw=linewidth,
+					ms=marker_size, mec=marker_edge_color, mfc=marker_fill_color,
+					mew=marker_edge_width, markevery=marker_interval, label=label)
 
 		for i, lbl in enumerate(marker_labels):
 			ax.annotate(lbl, (x[i], y[i]), fontsize=marker_label_fontsize,
