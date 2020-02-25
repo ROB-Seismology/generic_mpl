@@ -180,6 +180,9 @@ def plot_xy(datasets,
 		marker_edge_width = marker_edge_widths.next()
 		label = labels.next()
 
+		if len(x) == 0:
+			continue
+
 		if isinstance(x[0], datetime.datetime):
 			## Doesn't seem to be necessary
 			#x = pylab.date2num(x)
