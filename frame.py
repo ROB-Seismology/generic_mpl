@@ -316,7 +316,8 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 				major_loc = matplotlib.ticker.AutoLocator()
 		else:
 			major_loc = matplotlib.ticker.NullLocator()
-		ax.xaxis.set_major_locator(major_loc)
+		if major_loc:
+			ax.xaxis.set_major_locator(major_loc)
 		if isinstance(major_loc, mpl_dates.DateLocator):
 			if xtick_labels is None:
 				ax.xaxis.set_major_formatter(mpl_dates.AutoDateFormatter(locator=major_loc))
@@ -328,17 +329,26 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 		elif minor_tick_interval:
 			minor_loc = matplotlib.ticker.MultipleLocator(minor_tick_interval)
 		elif minor_tick_interval is None:
-			minor_loc = matplotlib.ticker.AutoLocator()
+			if xscaling[:3] == 'log':
+				minor_loc = None
+			else:
+				minor_loc = matplotlib.ticker.AutoMinorLocator()
 		else:
 			minor_loc = matplotlib.ticker.NullLocator()
-		ax.xaxis.set_minor_locator(minor_loc)
+		if minor_loc:
+			ax.xaxis.set_minor_locator(minor_loc)
 		## Note: no formatter for minor ticks, as we don't print them
 
 	## X ticklabels
 	if xscaling[:3] == 'log' and xtick_labels is None:
 		## Do not use log notation for small exponents
+		_xmin, _xmax = ax.get_xlim()
+		xmin = _xmin if xmin is None else xmin
+		xmax = _xmax if xmax is None else xmax
 		if xmin > 1E-4 and xmax < 1E+4:
 			xtick_labels = matplotlib.ticker.FormatStrFormatter('%g')
+		#else:
+		#	xtick_labels = matplotlib.ticker.LogFormatter()
 	if isinstance(xtick_labels, matplotlib.ticker.Formatter):
 		ax.xaxis.set_major_formatter(xtick_labels)
 	elif isinstance(xtick_labels, basestring):
@@ -375,7 +385,8 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 				major_loc = matplotlib.ticker.AutoLocator()
 		else:
 			major_loc = matplotlib.ticker.NullLocator()
-		ax.yaxis.set_major_locator(major_loc)
+		if major_loc:
+			ax.yaxis.set_major_locator(major_loc)
 		if isinstance(major_loc, mpl_dates.DateLocator):
 			if ytick_labels is None:
 				ax.yaxis.set_major_formatter(mpl_dates.AutoDateFormatter(locator=major_loc))
@@ -387,17 +398,26 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 		elif minor_tick_interval:
 			minor_loc = matplotlib.ticker.MultipleLocator(minor_tick_interval)
 		elif minor_tick_interval is None:
-			minor_loc = matplotlib.ticker.AutoMinorLocator()
+			if yscaling[:3] == 'log':
+				minor_loc = None
+			else:
+				minor_loc = matplotlib.ticker.AutoMinorLocator()
 		else:
 			minor_loc = matplotlib.ticker.NullLocator()
-		ax.yaxis.set_minor_locator(minor_loc)
+		if minor_loc:
+			ax.yaxis.set_minor_locator(minor_loc)
 		## Note: no formatter for minor ticks, as we don't print them
 
 	## Y tick labels
 	if yscaling[:3] == 'log' and ytick_labels is None:
+		_ymin, _ymax = ax.get_ylim()
+		ymin = _ymin if ymin is None else ymin
+		ymax = _ymax if ymax is None else ymax
 		## Do not use log notation for small exponents
 		if ymin > 1E-4 and ymax < 1E+4:
 			ytick_labels = matplotlib.ticker.FormatStrFormatter('%g')
+		#else:
+		#	ytick_labels = matplotlib.ticker.LogFormatterExponent()
 	if isinstance(ytick_labels, matplotlib.ticker.Formatter):
 		ax.yaxis.set_major_formatter(ytick_labels)
 	elif isinstance(ytick_labels, basestring):
