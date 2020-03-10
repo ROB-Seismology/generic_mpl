@@ -45,6 +45,12 @@ else:
 	reload(multi)
 from .multi import *
 
+## utils (no internal dependencies)
+if not reloading:
+	from . import utils
+else:
+	reload(utils)
+
 ## xy (depends on common, frame)
 if not reloading:
 	from . import xy
