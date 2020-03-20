@@ -88,8 +88,8 @@ def plot_histogram(datasets, bins, data_is_binned=False,
 	colors = cycle(colors)
 	labels = cycle(labels)
 
-	colors = [colors.next() for i in range(len(datasets))]
-	labels = [labels.next() for i in range(len(datasets))]
+	colors = [next(colors) for i in range(len(datasets))]
+	labels = [next(labels) for i in range(len(datasets))]
 
 	## Histogram
 	if orientation == 'vertical' and 'log' in yscaling:
