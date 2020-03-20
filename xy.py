@@ -168,17 +168,17 @@ def plot_xy(datasets,
 
 	for (x, y) in datasets:
 		assert len(x) == len(y)
-		color = colors.next()
-		fill_color = fill_colors.next()
-		linewidth = linewidths.next()
-		linestyle = linestyles.next()
-		marker = markers.next()
-		marker_size = marker_sizes.next()
-		marker_interval = marker_intervals.next()
-		marker_edge_color = marker_edge_colors.next()
-		marker_fill_color = marker_fill_colors.next()
-		marker_edge_width = marker_edge_widths.next()
-		label = labels.next()
+		color = next(colors)
+		fill_color = next(fill_colors)
+		linewidth = next(linewidths)
+		linestyle = next(linestyles)
+		marker = next(markers)
+		marker_size = next(marker_sizes)
+		marker_interval = next(marker_intervals)
+		marker_edge_color = next(marker_edge_colors)
+		marker_fill_color = next(marker_fill_colors)
+		marker_edge_width = next(marker_edge_widths)
+		label = next(labels)
 
 		if len(x) == 0:
 			continue
@@ -228,7 +228,7 @@ def plot_xy(datasets,
 	legend_fontsize = legend_fontsize or tick_label_fontsize
 	legend_font = FontProperties(size=legend_fontsize)
 	## Avoid warning if there are no labeled curves
-	if len(unique_labels.difference(set(['_nolegend_']))):
+	if len(unique_labels.difference(set(['_nolegend_', '']))):
 		ax.legend(loc=legend_location, prop=legend_font)
 
 	#if fig and tight_layout:
