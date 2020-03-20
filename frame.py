@@ -207,7 +207,7 @@ ax_frame_doc = """
 		(default: {})
 	:param vlines:
 		[x, ymin, ymax] list of arrays (of same length) or scalars
-		If ymin or ymax are None, limints of Y axis will be used
+		If ymin or ymax are None, limits of Y axis will be used
 		(default: [])
 	:param vline_args:
 		dict, containing keyword arguments understood by :func:`pylab.vlines`
@@ -243,19 +243,6 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 	:return:
 		None
 	"""
-	## Axis limits
-	if not (xmin is None and xmax is None):
-		_xmin, _xmax = ax.get_xlim()
-		xmin = _xmin if xmin is None else xmin
-		xmax = _xmax if xmax is None else xmax
-		ax.set_xlim(xmin, xmax)
-
-	if not (ymin is None and ymax is None):
-		_ymin, _ymax = ax.get_ylim()
-		ymin = _ymin if ymin is None else ymin
-		ymax = _ymax if ymax is None else ymax
-		ax.set_ylim(ymin, ymax)
-
 	## Axis scaling
 	if xscaling[0] == '-':
 		xscaling = xscaling[1:]
@@ -271,6 +258,21 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 	## Vertical / horizontal aspect ratio (in data units)
 	if aspect_ratio is not None:
 		ax.set_aspect(aspect_ratio)
+
+	## Axis limits (should come after axis scaling!)
+	if not (xmin is None and xmax is None):
+		_xmin, _xmax = ax.get_xlim()
+		xmin = _xmin if xmin is None else xmin
+		xmax = _xmax if xmax is None else xmax
+		ax.set_xlim(xmin, xmax)
+
+	if not (ymin is None and ymax is None):
+		_ymin, _ymax = ax.get_ylim()
+		print(_ymin, _ymax)
+		ymin = _ymin if ymin is None else ymin
+		ymax = _ymax if ymax is None else ymax
+		print(ymin, ymax)
+		ax.set_ylim(ymin, ymax)
 
 	## Axis labels
 	if xlabel:
