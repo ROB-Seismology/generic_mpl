@@ -268,10 +268,8 @@ def plot_ax_frame(ax, x_is_date=False, y_is_date=False,
 
 	if not (ymin is None and ymax is None):
 		_ymin, _ymax = ax.get_ylim()
-		print(_ymin, _ymax)
 		ymin = _ymin if ymin is None else ymin
 		ymax = _ymax if ymax is None else ymax
-		print(ymin, ymax)
 		ax.set_ylim(ymin, ymax)
 
 	## Axis labels
