@@ -104,7 +104,8 @@ def plot_histogram(datasets, bins, data_is_binned=False, weights=None,
 		(default: 0.5)
 	"""
 	frame_args = {key: val for (key, val) in locals().items()
-				if not key in ['datasets', 'bins', 'data_is_binned', 'histogram_type',
+				if not key in ['datasets', 'bins', 'data_is_binned',
+							'weights', 'histogram_type',
 							'cumulative', 'stacked', 'normed', 'orientation',
 							'align', 'bar_width', 'baseline', 'colors', 'labels',
 							'line_color', 'line_width',
@@ -196,8 +197,8 @@ def plot_histogram(datasets, bins, data_is_binned=False, weights=None,
 			bins = np.asarray(bins)
 			datasets = [((bins[1:] + bins[:-1]) / 2.) for i in range(len(datasets))]
 
-		if align == 'mid':
-			align = 'center'
+		if align == 'center':
+			align = 'mid'
 
 		ax.hist(datasets, bins, normed=normed, cumulative=cumulative,
 				histtype=histogram_type, align=align, orientation=orientation,
