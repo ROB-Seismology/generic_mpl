@@ -130,16 +130,14 @@ def plot_histogram(datasets, bins, data_is_binned=False, weights=None,
 		colors = matplotlib.cm.get_cmap(colors)
 	if isinstance(colors, matplotlib.colors.Colormap):
 		if len(datasets) > 1:
-			colors = colors(np.linspace(0, 1, len(datasets)))
+			num_colors = len(datasets)
 		else:
-			if data_is_binned:
-				num_bins = len(bins) - 1
+			if np.isscalar(bins):
+				num_colors = bins
 			else:
-				if np.isscalar(bins):
-					num_bins = bins
-				else:
-					num_bins = len(bins) - 1
-			colors = colors(np.linspace(0, 1, num_bins))
+				num_colors = len(bins) - 1
+		dc = 1. / num_colors / 2.
+		colors = colors(np.linspace(dc, 1-dc, num_colors))
 	if not labels:
 		#labels = ['%d' % i for i in range(len(datasets))]
 		labels = [''] * len(datasets)
