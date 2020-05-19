@@ -330,9 +330,18 @@ def plot_grid(data, X=None, Y=None,
 	if not isinstance(data, np.ma.MaskedArray):
 		data = np.ma.masked_array(data, mask=np.isnan(data))
 
+	if isinstance(cmap, basestring):
+		cmap = matplotlib.cm.get_cmap(cmap)
+
 	## Try to convert to piecewise constant norm or limit the number of colors
 	## in the color palette if color_gradient is 'discontinuous'
 	if color_gradient[:4] == 'disc':
+		if norm is None:
+			if vmin is None:
+				vmin = np.nanmin(data)
+			if vmax is None:
+				vmax = np.nanmax(data)
+			norm = BoundaryNorm(np.linspace(vmin, vmax, 8), cmap.N)
 		if isinstance(norm, PiecewiseLinearNorm):
 			norm = norm.to_piecewise_constant_norm()
 		elif not isinstance(norm, (PiecewiseConstantNorm, BoundaryNorm)):
@@ -349,13 +358,14 @@ def plot_grid(data, X=None, Y=None,
 	if smoothed:
 		## data must have same size as X and Y for contourf
 		if color_gradient[:4] == 'disc':
-			V = norm.breakpoints
+			V = getattr(norm, 'breakpoints', getattr(norm, 'boundaries'))
 			if X is None and Y is None:
 				cs = ax.contourf(data, V, **common_kwargs)
 			else:
 				cs = ax.contourf(Xc, Yc, data, V, **common_kwargs)
 		else:
-			V = 1100
+			#V = 1100
+			V = cmap.N
 			if X is None and Y is None:
 				cs = ax.contourf(data, V, **common_kwargs)
 			else:
@@ -491,7 +501,7 @@ def plot_grid(data, X=None, Y=None,
 			sm = matplotlib.cm.ScalarMappable(cmap=cmap, norm=norm)
 			sm.set_array(data)
 			if color_gradient == 'disc':
-				boundaries = norm.breakpoints
+				boundaries = getattr(norm, 'breakpoints', getattr(norm, 'boundaries'))
 				if cbar_extend in ('left', 'both'):
 					boundaries = np.hstack([[-1E+12], boundaries])
 				if cbar_extend in ('right', 'both'):
