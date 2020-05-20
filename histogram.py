@@ -126,6 +126,7 @@ def plot_histogram(datasets, bins, data_is_binned=False, weights=None,
 	if not colors:
 		#colors = 'bgrcmyk'
 		colors = pylab.rcParams['axes.prop_cycle'].by_key()['color']
+		colors = colors[:len(datasets)]
 	if isinstance(colors, basestring):
 		colors = matplotlib.cm.get_cmap(colors)
 	if isinstance(colors, matplotlib.colors.Colormap):
@@ -175,6 +176,8 @@ def plot_histogram(datasets, bins, data_is_binned=False, weights=None,
 
 		if bar_width is None:
 			bar_width = 0.8
+		## Convert to absolute bar width, assuming uniform bin intervals
+		bar_width *= np.abs(bin_edges[1] - bin_edges[0])
 
 		if align == 'mid':
 			align = 'center'
@@ -197,6 +200,10 @@ def plot_histogram(datasets, bins, data_is_binned=False, weights=None,
 
 		if align == 'center':
 			align = 'mid'
+
+		## Work around bug
+		if np.isscalar(baseline):
+			baseline = [baseline]
 
 		ax.hist(datasets, bins, normed=normed, cumulative=cumulative,
 				histtype=histogram_type, align=align, orientation=orientation,
