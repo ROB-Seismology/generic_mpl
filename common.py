@@ -111,8 +111,14 @@ def show_or_save_plot(ax_or_fig, fig_filespec=None, dpi=300, border_width=0.2):
 			kwargs = dict(bbox_inches="tight", pad_inches=border_width/2.54)
 		fig.savefig(fig_filespec, dpi=dpi, **kwargs)
 		pylab.clf()
+
+		## Restore default style if we get here
+		pylab.style.use('default')
 	else:
 		## Note, using fig.show(), the plot disappears immediately!
 		#fig.show()
 		pylab.show()
+
+		## Restore default style if we get here
+		pylab.style.use('default')
 		return ax_or_fig
