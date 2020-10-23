@@ -170,7 +170,7 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 		figsize = (w * num_cols, h * num_rows)
 	else:
 		figsize = None
-	fig = pylab.figure(figsize=figsize, dpi=dpi)
+	fig = pylab.figure(figsize=figsize, dpi=dpi, facecolor='white')
 	gs = gridspec.GridSpec(ncols=num_cols, nrows=num_rows,
 						wspace=wspace, hspace=hspace,
 						width_ratios=width_ratios, height_ratios=height_ratios)

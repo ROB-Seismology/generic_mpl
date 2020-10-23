@@ -282,7 +282,7 @@ def plot_grid(data, X=None, Y=None,
 	if ax is None:
 		if fig_filespec:
 			pylab.ioff()
-		fig, ax = pylab.subplots(figsize=figsize)
+		fig, ax = pylab.subplots(figsize=figsize, facecolor='white')
 	else:
 		fig = ax.get_figure()
 

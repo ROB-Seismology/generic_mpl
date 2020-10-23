@@ -108,7 +108,7 @@ def plot_xy(datasets,
 
 	if ax is None:
 		#ax = pylab.axes()
-		fig, ax = pylab.subplots(figsize=figsize)
+		fig, ax = pylab.subplots(figsize=figsize, facecolor='white')
 	else:
 		fig = ax.get_figure()
 
@@ -300,7 +300,7 @@ def plot_density(x, y, grid_size, density_type='hist2d', min_cnt=None, max_cnt=N
 
 	if ax is None:
 		#ax = pylab.axes()
-		fig, ax = pylab.subplots(figsize=figsize)
+		fig, ax = pylab.subplots(figsize=figsize, facecolor='white')
 	else:
 		fig = ax.get_figure()
 

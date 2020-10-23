@@ -118,7 +118,7 @@ def plot_histogram(datasets, bins, data_is_binned=False, weights=None,
 	pylab.style.use(style_sheet)
 
 	if ax is None:
-		fig, ax = pylab.subplots(figsize=figsize)
+		fig, ax = pylab.subplots(figsize=figsize, facecolor='white')
 	else:
 		fig = ax.get_figure()
 
