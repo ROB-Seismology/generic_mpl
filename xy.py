@@ -238,9 +238,6 @@ def plot_xy(datasets,
 	return show_or_save_plot(ax, fig_filespec=fig_filespec, dpi=dpi,
 							border_width=border_width)
 
-	## Restore default style if we get here
-	pylab.style.use('default')
-
 plot_xy.__doc__ += (ax_frame_doc + common_doc)
 
 
@@ -379,8 +376,5 @@ def plot_density(x, y, grid_size, density_type='hist2d', min_cnt=None, max_cnt=N
 	## Output
 	return show_or_save_plot(ax, fig_filespec=fig_filespec, dpi=dpi,
 							border_width=border_width)
-
-	## Restore default style if we get here
-	pylab.style.use('default')
 
 plot_density.__doc__ += (ax_frame_doc + common_doc)

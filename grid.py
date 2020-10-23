@@ -539,7 +539,4 @@ def plot_grid(data, X=None, Y=None,
 	return show_or_save_plot(ax, fig_filespec=fig_filespec, dpi=dpi,
 							border_width=border_width)
 
-	## Restore default style if we get here
-	pylab.style.use('default')
-
 plot_grid.__doc__ += (ax_frame_doc + common_doc)

@@ -226,7 +226,4 @@ def plot_histogram(datasets, bins, data_is_binned=False, weights=None,
 	return show_or_save_plot(ax, fig_filespec=fig_filespec, dpi=dpi,
 							border_width=border_width)
 
-	## Restore default style if we get here
-	pylab.style.use('default')
-
 plot_histogram.__doc__ += (ax_frame_doc + common_doc)
