@@ -141,6 +141,9 @@ def plot_xy(datasets,
 		marker_edge_widths = [1]
 	if not labels:
 		labels = ['_nolegend_']
+	for i, label in enumerate(labels):
+		if label in (None, '', 'None'):
+			labels[i] = '_nolegend_'
 	unique_labels = set(labels)
 
 	colors = cycle(colors)
