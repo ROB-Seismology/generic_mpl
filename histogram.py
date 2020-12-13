@@ -142,6 +142,9 @@ def plot_histogram(datasets, bins, data_is_binned=False, weights=None,
 	if not labels:
 		#labels = ['%d' % i for i in range(len(datasets))]
 		labels = [''] * len(datasets)
+	for i, label in enumerate(labels):
+		if label in (None, '', 'None'):
+			labels[i] = '_nolegend_'
 	unique_labels = set(labels)
 
 	if not (len(datasets) == 1 and len(colors) > 1):
