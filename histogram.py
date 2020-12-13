@@ -165,7 +165,7 @@ def plot_histogram(datasets, bins, data_is_binned=False, weights=None,
 	if len(datasets) == 1 and len(colors) > 1 and histogram_type[:3] == 'bar':
 		if not data_is_binned:
 			bar_heights, bin_edges = pylab.histogram(datasets[0], bins=bins,
-												normed=normed, weights=weights)
+												density=normed, weights=weights)
 		else:
 			bin_edges = bins
 			bar_heights = datasets[0]
