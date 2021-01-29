@@ -358,7 +358,10 @@ def plot_grid(data, X=None, Y=None,
 	if smoothed:
 		## data must have same size as X and Y for contourf
 		if color_gradient[:4] == 'disc':
-			V = getattr(norm, 'breakpoints', getattr(norm, 'boundaries'))
+			try:
+				V = getattr(norm, 'breakpoints')
+			except:
+				V = getattr(norm, 'boundaries')
 			if X is None and Y is None:
 				cs = ax.contourf(data, V, **common_kwargs)
 			else:
@@ -501,7 +504,10 @@ def plot_grid(data, X=None, Y=None,
 			sm = matplotlib.cm.ScalarMappable(cmap=cmap, norm=norm)
 			sm.set_array(data)
 			if color_gradient == 'disc':
-				boundaries = getattr(norm, 'breakpoints', getattr(norm, 'boundaries'))
+				try:
+					boundaries = getattr(norm, 'breakpoints')
+				except:
+					boundaries = getattr(norm, 'boundaries')
 				if cbar_extend in ('left', 'both'):
 					boundaries = np.hstack([[-1E+12], boundaries])
 				if cbar_extend in ('right', 'both'):
