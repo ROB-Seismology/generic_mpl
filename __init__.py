@@ -24,6 +24,12 @@ else:
 
 ## Import submodules
 
+## colors (no internal dependencies)
+if not reloading:
+	from . import colors
+else:
+	reload(colors)
+
 ## common (no internal dependencies)
 if not reloading:
 	from . import common
