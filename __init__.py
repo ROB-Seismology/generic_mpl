@@ -22,6 +22,10 @@ else:
 		pass
 
 
+import pylab
+DEFAULT_COLORS = pylab.rcParams['axes.prop_cycle'].by_key()['color']
+
+
 ## Import submodules
 
 ## colors (no internal dependencies)
