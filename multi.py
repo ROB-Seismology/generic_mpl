@@ -232,7 +232,7 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 					txt_kwargs = col_row_title_font.to_kwargs()
 				txt_kwargs.pop('rotation', None)
 				txt = AnchoredText(col_titles[col], loc=8, frameon=True,
-									bbox_to_anchor=(0.5, 1.),
+									bbox_to_anchor=(0.5, 1.15),
 									bbox_transform=ax.transAxes, **txt_kwargs)
 				ax.add_artist(txt)
 			if ax.is_first_col() and row < len(row_titles):
@@ -245,7 +245,7 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 					txt_kwargs['bbox'] = dict(boxstyle='square', fc='w')
 				txt_kwargs['va'] = 'center'
 				txt_kwargs['ha'] = 'right'
-				ax.annotate(row_titles[row], xy=(0., 0.5), xycoords='axes fraction',
+				ax.annotate(row_titles[row], xy=(-0.15, 0.5), xycoords='axes fraction',
 							xytext=(-10, 0), textcoords='offset points',
 							**txt_kwargs)
 				"""
@@ -284,7 +284,7 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 					if share_xlabel and not xlabel:
 						ax.xaxis.set_label_position('top')
 						ax.xaxis.label.set_visible(True)
-			elif ax.is_last_row():
+			if ax.is_last_row():
 				if xlabel_side in ('bottom', 'both', ''):
 					if sharex:
 						ax.tick_params(labelbottom=True)
@@ -316,7 +316,7 @@ def create_multi_plot(num_rows, num_cols, wspace=None, hspace=None,
 					if share_ylabel and not ylabel:
 						ax.yaxis.set_label_position('left')
 						ax.yaxis.label.set_visible(True)
-			elif ax.is_last_col():
+			if ax.is_last_col():
 				if ylabel_side in ('right', 'both'):
 					if sharey:
 						ax.tick_params(labelright=True)
