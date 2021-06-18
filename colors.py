@@ -9,7 +9,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 
 
-_all__ = ['get_random_colors', 'get_spaced_colors']
+_all__ = ['get_random_colors', 'get_spaced_colors', 'DEFAULT_COLORS']
+
+
+import pylab
+DEFAULT_COLORS = pylab.rcParams['axes.prop_cycle'].by_key()['color']
 
 
 def get_random_colors(num_colors, color_table='css4', random_seed=None):
