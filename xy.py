@@ -169,6 +169,8 @@ def plot_xy(datasets,
 	#	elif yscaling == 'log':
 	#		plotfunc = getattr(ax, 'loglog')
 
+	x_is_date, y_is_date = False, False
+
 	for (x, y) in datasets:
 		assert len(x) == len(y)
 		color = next(colors)
@@ -190,13 +192,9 @@ def plot_xy(datasets,
 			## Doesn't seem to be necessary
 			#x = pylab.date2num(x)
 			x_is_date = True
-		else:
-			x_is_date = False
 		if isinstance(y[0], datetime.datetime):
 			#y = pylab.date2num(y)
 			y_is_date = True
-		else:
-			y_is_date = False
 
 		if fill_color:
 			ax.fill(x, y, facecolor=fill_color, edgecolor=color, lw=linewidth,
